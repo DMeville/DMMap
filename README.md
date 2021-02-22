@@ -1,6 +1,6 @@
-**MIT License. Do whatever you want.**
+**MIT License. Do whatever you want.** 
 
-Since this was depreciated/removed from the asset store, and I don't have time to really develop or support this asset anymore I've decided to release it as open source. Code is supplied as is, but if you want to make pull requests I'd be happy to consider them.  
+Since this was depreciated/removed from the asset store, and I don't have time to really develop or support this asset anymore I've decided to release it as open source. Code is supplied as is, but if you want to make pull requests I'd be happy to consider them. Take the DMMap folder and stick it somewhere in your unity project's "Assets" folder to install.
 
 See the unity forums thread for more info about DMMap: https://forum.unity.com/threads/released-dmmap-minimap-system-2-0-procedural-multi-layer-vector-like-maps-ugui-25-off.261178
 
