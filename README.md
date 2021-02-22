@@ -8,6 +8,8 @@ See the unity forums thread for more info about DMMap: https://forum.unity.com/t
 
 DMMap is a minimap solution for easily creating vector-looking minimaps, simply draw a few shapes with the DMMapShape component, or throw some shapes into your prefabs as you're building your levels, hit the generate button and you're good to go!
 
+![Screenshot](http://dylanmeville.com/Unity/DMMap/Docs/Screenshot_1.png)
+
 # -= Features =-
 Unity 5 Support!  Now uses uGUI for all rendering!
 **Works with procedurally generated levels!**
