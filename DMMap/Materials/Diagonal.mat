@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Diagonal
+  m_Shader: {fileID: 4800000, guid: 6c2724c918d4849958a19c1d5a49031e, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - _Angle: 45
+    - _Cutoff: 0.5
+    - _Divisions: -0.29
+    - _OutlineWidth: 1.95
+    m_Colors:
+    - _Color: {r: 0.61007786, g: 0.9117647, b: 0.9117647, a: 1}
+    - _StrokeColor: {r: 0.04282008, g: 0.26558295, b: 0.4852941, a: 1}
