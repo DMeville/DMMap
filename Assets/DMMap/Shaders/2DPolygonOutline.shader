@@ -1,99 +1,75 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+// Made with Amplify Shader Editor
+// Available at the Unity Asset Store - http://u3d.as/y3X 
+Shader "DM/2DPolygonOutline"
+{
+	Properties
+	{
+		_MeshColor("MeshColor", Color) = (0,0,0,0)
+		_OutlineWidth("OutlineWidth", Float) = 0
+		_NormalFudge("NormalFudge", Vector) = (0,0,0,0)
+		[HideInInspector] __dirty( "", Int ) = 1
+	}
 
-// Shader created with Shader Forge v1.13 
-// Shader Forge (c) Neat Corporation / Joachim Holmer - http://www.acegikmo.com/shaderforge/
-// Note: Manually altering this data may prevent you from opening it in Shader Forge
-/*SF_DATA;ver:1.13;sub:START;pass:START;ps:flbk:,lico:1,lgpr:1,nrmq:1,nrsp:0,limd:0,spmd:1,trmd:0,grmd:0,uamb:True,mssp:True,bkdf:False,rprd:False,enco:False,rmgx:True,rpth:0,hqsc:True,hqlp:False,tesm:0,bsrc:0,bdst:1,culm:0,dpts:2,wrdp:True,dith:0,ufog:True,aust:True,igpj:False,qofs:0,qpre:1,rntp:1,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,ofsf:0,ofsu:0,f2p0:False;n:type:ShaderForge.SFN_Final,id:1,x:33466,y:32712,varname:node_1,prsc:2|custl-5-RGB,olwid-4-OUT,olcol-3-RGB;n:type:ShaderForge.SFN_Color,id:3,x:33006,y:32855,ptovrint:False,ptlb:OutlineColor,ptin:_OutlineColor,varname:node_2636,prsc:2,glob:False,c1:1,c2:1,c3:1,c4:1;n:type:ShaderForge.SFN_ValueProperty,id:4,x:33006,y:32772,ptovrint:False,ptlb:OutlineWidth,ptin:_OutlineWidth,varname:node_3062,prsc:2,glob:False,v1:0;n:type:ShaderForge.SFN_Color,id:5,x:32995,y:32602,ptovrint:False,ptlb:MeshColor,ptin:_MeshColor,varname:node_1855,prsc:2,glob:False,c1:1,c2:1,c3:1,c4:1;proporder:3-4-5;pass:END;sub:END;*/
+	SubShader
+	{
+		Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" "IsEmissive" = "true"  }
+		Cull Off
+		CGPROGRAM
+		#pragma target 3.0
+		#pragma surface surf Unlit keepalpha addshadow fullforwardshadows vertex:vertexDataFunc 
+		struct Input
+		{
+			half filler;
+		};
 
-Shader "DMMap/2DPolygonOutline" {
-    Properties {
-        _OutlineColor ("OutlineColor", Color) = (1,1,1,1)
-        _OutlineWidth ("OutlineWidth", Float ) = 0
-        _MeshColor ("MeshColor", Color) = (1,1,1,1)
-    }
-    SubShader {
-        Tags {
-            "RenderType"="Opaque"
-        }
-        Pass {
-            Name "Outline"
-            Tags {
-            }
-            Cull Back
-			ColorMask RGBA
-            
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #include "UnityCG.cginc"
-            #pragma fragmentoption ARB_precision_hint_fastest
-            #pragma multi_compile_shadowcaster
-            #pragma multi_compile_fog
-            #pragma exclude_renderers xbox360 ps3 
-            #pragma target 3.0
-            uniform float4 _OutlineColor;
-            uniform float _OutlineWidth;
-            struct VertexInput {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-            };
-            struct VertexOutput {
-                float4 pos : SV_POSITION;
-                UNITY_FOG_COORDS(0)
-            };
-            VertexOutput vert (VertexInput v) {
-                VertexOutput o = (VertexOutput)0;
-                o.pos = UnityObjectToClipPos(float4(v.vertex.xyz + v.normal*_OutlineWidth,1));
-                UNITY_TRANSFER_FOG(o,o.pos);
-                return o;
-            }
-            float4 frag(VertexOutput i) : COLOR {
-/////// Vectors:
-                return fixed4(_OutlineColor.rgb, 1);
-            }
-            ENDCG
-        }
-        Pass {
-            Name "FORWARD"
-            Tags {
-                "LightMode"="ForwardBase"
-            }
-            ColorMask RGB
-            
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            #define UNITY_PASS_FORWARDBASE
-            #include "UnityCG.cginc"
-            #pragma multi_compile_fwdbase_fullshadows
-            #pragma multi_compile_fog
-            #pragma exclude_renderers xbox360 ps3 
-            #pragma target 3.0
-            uniform float4 _MeshColor;
-            struct VertexInput {
-                float4 vertex : POSITION;
-            };
-            struct VertexOutput {
-                float4 pos : SV_POSITION;
-                UNITY_FOG_COORDS(0)
-            };
-            VertexOutput vert (VertexInput v) {
-                VertexOutput o = (VertexOutput)0;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                UNITY_TRANSFER_FOG(o,o.pos);
-                return o;
-            }
-            float4 frag(VertexOutput i) : COLOR {
-/////// Vectors:
-////// Lighting:
-                float3 finalColor = _MeshColor.rgb;
-                fixed4 finalRGBA = fixed4(finalColor,1);
-                UNITY_APPLY_FOG(i.fogCoord, finalRGBA);
-                return finalRGBA;
-            }
-            ENDCG
-        }
-    }
-    FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+		uniform float3 _NormalFudge;
+		uniform float _OutlineWidth;
+		uniform float4 _MeshColor;
+
+		void vertexDataFunc( inout appdata_full v, out Input o )
+		{
+			UNITY_INITIALIZE_OUTPUT( Input, o );
+			float3 ase_vertexNormal = v.normal.xyz;
+			float3 temp_output_7_0 = ( ( ase_vertexNormal + _NormalFudge ) * _OutlineWidth );
+			v.vertex.xyz += temp_output_7_0;
+			v.vertex.w = 1;
+		}
+
+		inline half4 LightingUnlit( SurfaceOutput s, half3 lightDir, half atten )
+		{
+			return half4 ( 0, 0, 0, s.Alpha );
+		}
+
+		void surf( Input i , inout SurfaceOutput o )
+		{
+			o.Emission = _MeshColor.rgb;
+			o.Alpha = 1;
+		}
+
+		ENDCG
+	}
+	Fallback "Diffuse"
+	CustomEditor "ASEMaterialInspector"
 }
+/*ASEBEGIN
+Version=18800
+1902;73;1537;940;1382.612;376.7151;1.3;True;False
+Node;AmplifyShaderEditor.NormalVertexDataNode;3;-862,341;Inherit;False;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.Vector3Node;9;-859,478;Inherit;False;Property;_NormalFudge;NormalFudge;3;0;Create;True;0;0;0;False;0;False;0,0,0;0,0,0;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
+Node;AmplifyShaderEditor.RangedFloatNode;4;-862,659;Inherit;False;Property;_OutlineWidth;OutlineWidth;2;0;Create;True;0;0;0;False;0;False;0;-0.26;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;10;-629,454;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;7;-399,389;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.ColorNode;1;-575,-173;Inherit;False;Property;_MeshColor;MeshColor;0;0;Create;True;0;0;0;False;0;False;0,0,0,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;2;-672,157;Inherit;False;Property;_OutlineColor;OutlineColor;1;0;Create;True;0;0;0;False;0;False;0,0,0,0;1,1,1,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.OutlineNode;6;-149,242;Inherit;False;0;True;None;0;0;Off;3;0;FLOAT3;0,0,0;False;2;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;293,-53;Float;False;True;-1;2;ASEMaterialInspector;0;0;Unlit;DM/2DPolygonOutline;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;Off;0;False;-1;0;False;-1;False;0;False;-1;0;False;-1;False;0;Opaque;0.5;True;True;0;False;Opaque;;Geometry;All;14;all;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;True;0;0;False;-1;0;False;-1;0;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;;-1;-1;-1;-1;0;False;0;0;False;-1;-1;0;False;-1;0;0;0;False;0.1;False;-1;0;False;-1;False;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0;False;4;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
+WireConnection;10;0;3;0
+WireConnection;10;1;9;0
+WireConnection;7;0;10;0
+WireConnection;7;1;4;0
+WireConnection;6;0;2;0
+WireConnection;6;1;7;0
+WireConnection;0;2;1;0
+WireConnection;0;11;7;0
+ASEEND*/
+//CHKSM=DCA27FF6A2DF4CDE8AA720652F1AE5990D6FBEA8

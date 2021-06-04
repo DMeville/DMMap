@@ -52,7 +52,7 @@ namespace DMM {
         /// <summary>
         /// The material used for the generated meshes.  This Should be set to the material found in DMMap/Materials/2DPolygonOutline
         /// </summary>
-        public Material defaultMaterial;
+        public List<Material> defaultMaterial;
 
         /// <summary>
         /// The camera used to render the minimap.  This should be set to the Camera object found on the DMMap prefab "DMMapCamera"
@@ -205,6 +205,7 @@ namespace DMM {
             }
 
             meshLayers = new GameObject[highestLayer + 1];
+            Debug.Log("MeshLayers: " + meshLayers.Length);
             for (int i = 0; i < meshLayers.Length; i++) {
                 GenerateMeshLayer(i);
             }
@@ -285,7 +286,7 @@ namespace DMM {
                 }
                 catch {
                     try {
-                        meshLayers[i].GetComponent<Renderer>().material = defaultMaterial;
+                        meshLayers[i].GetComponent<Renderer>().materials = defaultMaterial.ToArray();
                     }
                     catch {
                     }
@@ -554,21 +555,22 @@ namespace DMM {
             meshObject.layer = LayerMask.NameToLayer("DMMap");
             meshObject.transform.parent = meshContainer.transform;
             meshLayers[layer] = meshObject;
+            float layerYScale = 0.01f;
 
             switch (orientation) {
                 case MapOrientation.XZ:
                     meshObject.gameObject.transform.localScale = new Vector3(1f, -1f, 1f);
-                    meshObject.gameObject.transform.position = new Vector3(0f, 1f * layer, 0f);
+                    meshObject.gameObject.transform.position = new Vector3(0f, 1f * layer*layerYScale, 0f);
                     break;
                 case MapOrientation.XY:
                     meshObject.gameObject.transform.localScale = new Vector3(1f, -1f, 1f);
-                    meshObject.gameObject.transform.position = new Vector3(0f, 0f, 1f * layer);
+                    meshObject.gameObject.transform.position = new Vector3(0f, 0f, 1f * layer * layerYScale);
                     meshObject.gameObject.transform.rotation = Quaternion.AngleAxis(-90f, Vector3.right);
 
                     break;
                 case MapOrientation.YZ:
                     meshObject.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
-                    meshObject.gameObject.transform.position = new Vector3(1f*layer, 0f, 0f);
+                    meshObject.gameObject.transform.position = new Vector3(1f* layer * layerYScale, 0f, 0f);
                     meshObject.gameObject.transform.rotation = Quaternion.AngleAxis(90f, Vector3.forward);
 
                     break;
@@ -902,8 +904,8 @@ namespace DMM {
                 meshrenderer.receiveShadows = false;
             }
 
-            
-            meshrenderer.material = defaultMaterial;
+
+            meshrenderer.materials = defaultMaterial.ToArray();
             mf.mesh = mesh;
             DMMapDebug("Map Generation Complete: Layer[" + layer + "]");
 

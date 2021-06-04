@@ -9,7 +9,7 @@ namespace DMM {
         public DMMapShape parentShape;
 
         public void OnDestroy() {
-            parentShape.RemovePoint(this);
+            if(parentShape != null) parentShape.RemovePoint(this);
             parentShape = null;
         }
     }

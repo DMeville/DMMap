@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DMM;
+using UnityEngine.SceneManagement;
 
 public class DMMapUIControls : MonoBehaviour {
 
@@ -48,10 +49,10 @@ public class DMMapUIControls : MonoBehaviour {
     }
 
     public void NextDemo() {
-        int loadedLevel = Application.loadedLevel;
+        int loadedLevel = SceneManager.GetActiveScene().buildIndex;
         loadedLevel++;
         if (loadedLevel >= 4) loadedLevel = 0;
-        Application.LoadLevel(loadedLevel);
+        SceneManager.LoadScene(loadedLevel, LoadSceneMode.Single);
     }
     public bool toggle = false;
 

@@ -31,9 +31,9 @@ namespace DMM {
             Gizmos.color = c;
             if (verts.Count >= 2) {
                 for (int i = 0; i < verts.Count - 1; i++) {
-                    Debug.DrawLine(verts[i].transform.position, verts[i + 1].transform.position, c);
+                    Gizmos.DrawLine(verts[i].transform.position, verts[i + 1].transform.position);
                 }
-                Debug.DrawLine(verts[verts.Count - 1].transform.position, verts[0].transform.position, c);
+                Gizmos.DrawLine(verts[verts.Count - 1].transform.position, verts[0].transform.position);
             }
         }
 

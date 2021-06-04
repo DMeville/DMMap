@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 2DPolygonOutline 1
+  m_Name: 2DPolygonOutlineInner
   m_Shader: {fileID: 4800000, guid: 3f7c9a4c016b7884ea4469be499a9e48, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 5
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,13 +24,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _OutlineWidth: 2.25
-    - __dirty: 0
+    - _OutlineWidth: -0.1
+    - __dirty: 1
     - _node_2: 10
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _MeshColor: {r: 0.39705884, g: 0.33681545, b: 0, a: 1}
+    - _MeshColor: {r: 1, g: 1, b: 1, a: 0}
     - _NormalFudge: {r: 0, g: 0, b: 0, a: 0}
-    - _OutlineColor: {r: 0.71810347, g: 0.875, b: 0, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _node_3: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
