@@ -50,7 +50,14 @@ namespace DMM {
             p.parentShape = this;
             verts.Add(v);
             v.transform.parent = this.transform;
-            v.transform.localPosition = Vector3.zero;
+            v.transform.localPosition= Vector3.zero;
+            v.transform.localScale = Vector3.one;
+            return v;
+        }
+
+        public GameObject NewPoint(Vector3 pos) {
+            GameObject v = NewPoint();
+            v.transform.position = pos;
             return v;
         }
 
@@ -65,7 +72,20 @@ namespace DMM {
                 verts.Remove(g);
             }
         }
+        public void SetupBaseShape() {
+            Collider col = GetComponent<Collider>();
+            if (col)
+            {
+                NewPoint(new Vector3(col.bounds.min.x, col.bounds.max.y, col.bounds.min.z));
+                NewPoint(new Vector3(col.bounds.min.x, col.bounds.max.y, col.bounds.max.z));
+                NewPoint(new Vector3(col.bounds.max.x, col.bounds.max.y, col.bounds.max.z));
+                NewPoint(new Vector3(col.bounds.max.x, col.bounds.max.y, col.bounds.min.z));
+            }
+            else {
+                Debug.LogWarning("No Collider found on GameObject " + gameObject.name + " Please add collider component for functionality");
+            }
 
+        }
         public void OnDestroy() {
             if (DMMap.instance == null) {
                 return;
