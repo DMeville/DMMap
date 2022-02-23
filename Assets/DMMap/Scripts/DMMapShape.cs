@@ -74,13 +74,16 @@ namespace DMM {
         }
         public void SetupBaseShape() {
             Collider col = GetComponent<Collider>();
-            var min =  - col.bounds.size*.5f;
-            var max =  col.bounds.size*.5f;
-            NewPoint(new Vector3(col.bounds.min.x, col.bounds.max.y, col.bounds.min.z));
-            NewPoint(new Vector3(col.bounds.min.x, col.bounds.max.y, -col.bounds.min.z));
-            NewPoint(new Vector3(col.bounds.max.x, col.bounds.max.y, -col.bounds.min.z));
-            NewPoint(new Vector3(col.bounds.max.x, col.bounds.max.y, col.bounds.min.z));
-
+            if (col)
+            {
+                NewPoint(new Vector3(col.bounds.min.x, col.bounds.max.y, col.bounds.min.z));
+                NewPoint(new Vector3(col.bounds.min.x, col.bounds.max.y, col.bounds.max.z));
+                NewPoint(new Vector3(col.bounds.max.x, col.bounds.max.y, col.bounds.max.z));
+                NewPoint(new Vector3(col.bounds.max.x, col.bounds.max.y, col.bounds.min.z));
+            }
+            else {
+                Debug.LogWarning("No Collider found on GameObject " + gameObject.name + " Please add collider component for functionality");
+            }
 
         }
         public void OnDestroy() {
